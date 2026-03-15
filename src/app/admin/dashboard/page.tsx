@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -41,7 +41,7 @@ export default function DashboardPage() {
   const [recent, setRecent] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("admin_token");
@@ -57,9 +57,9 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
 
-  useEffect(() => { fetchStats(); }, []);
+  useEffect(() => { fetchStats(); }, [fetchStats]);
 
   const STAT_CARDS = stats
     ? [
